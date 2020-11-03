@@ -1,5 +1,6 @@
 %{
-    enum TokenCode { IDENTIFIER = 1,
+enum TokenCode {
+    IDENTIFIER = 1,
     LEFT_BRACE,
     RIGHT_BRACE,
     IO_IN,
@@ -125,7 +126,7 @@ int main(int argc, char**argv) {
                 }
                 pif << current_code << "\t\t" << symbol_indices.at(yytext) << '\n';
                 break;
-            default: pif << current_code << "\t\t" << -1 << '\n';
+            default: pif << current_code << "\t\t" << 0 << '\n';
         }
     }
 }

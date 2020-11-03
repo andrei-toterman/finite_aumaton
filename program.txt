@@ -15,7 +15,7 @@ while < i k {
         if == % i j 0 {
             t = false;
         }
-        j = + j 1;@
+        j = + j 1;
     }
     if t {
         $out i

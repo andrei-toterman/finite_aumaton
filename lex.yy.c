@@ -496,9 +496,10 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "ex.lxi"
-#line 2 "ex.lxi"
-    enum TokenCode { IDENTIFIER = 1,
+#line 1 "lexer.lxi"
+#line 2 "lexer.lxi"
+enum TokenCode {
+    IDENTIFIER = 1,
     LEFT_BRACE,
     RIGHT_BRACE,
     IO_IN,
@@ -534,8 +535,8 @@ char *yytext;
 
 #include <stdio.h>
 int line_number = 1;
-#line 537 "lex.yy.c"
 #line 538 "lex.yy.c"
+#line 539 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -752,10 +753,10 @@ YY_DECL
 		}
 
 	{
-#line 43 "ex.lxi"
+#line 44 "lexer.lxi"
 
 
-#line 758 "lex.yy.c"
+#line 759 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -814,186 +815,186 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 45 "ex.lxi"
+#line 46 "lexer.lxi"
 return IF;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 46 "ex.lxi"
+#line 47 "lexer.lxi"
 return ELSE;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 47 "ex.lxi"
+#line 48 "lexer.lxi"
 return ELIF;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 48 "ex.lxi"
+#line 49 "lexer.lxi"
 return WHILE;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 50 "ex.lxi"
+#line 51 "lexer.lxi"
 return LEFT_BRACE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 51 "ex.lxi"
+#line 52 "lexer.lxi"
 return RIGHT_BRACE;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 53 "ex.lxi"
+#line 54 "lexer.lxi"
 return IO_IN;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 54 "ex.lxi"
+#line 55 "lexer.lxi"
 return IO_OUT;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 55 "ex.lxi"
+#line 56 "lexer.lxi"
 return IO_ERR;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 57 "ex.lxi"
+#line 58 "lexer.lxi"
 return EXIT;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 59 "ex.lxi"
+#line 60 "lexer.lxi"
 return SEMICOLON;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 60 "ex.lxi"
+#line 61 "lexer.lxi"
 return PLUS;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 61 "ex.lxi"
+#line 62 "lexer.lxi"
 return MINUS;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 62 "ex.lxi"
+#line 63 "lexer.lxi"
 return MULTIPLY;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 63 "ex.lxi"
+#line 64 "lexer.lxi"
 return DIVIDE;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 64 "ex.lxi"
+#line 65 "lexer.lxi"
 return REMAINDER;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 66 "ex.lxi"
+#line 67 "lexer.lxi"
 return AND;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 67 "ex.lxi"
+#line 68 "lexer.lxi"
 return OR;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 69 "ex.lxi"
+#line 70 "lexer.lxi"
 return LT;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 70 "ex.lxi"
+#line 71 "lexer.lxi"
 return GT;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 71 "ex.lxi"
+#line 72 "lexer.lxi"
 return EQ;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 72 "ex.lxi"
+#line 73 "lexer.lxi"
 return LTE;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 73 "ex.lxi"
+#line 74 "lexer.lxi"
 return GTE;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 74 "ex.lxi"
+#line 75 "lexer.lxi"
 return NEQ;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 76 "ex.lxi"
+#line 77 "lexer.lxi"
 return ASSIGNMENT;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 78 "ex.lxi"
+#line 79 "lexer.lxi"
 return INT_T;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 79 "ex.lxi"
+#line 80 "lexer.lxi"
 return INT_V;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 81 "ex.lxi"
+#line 82 "lexer.lxi"
 return STRING_T;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 82 "ex.lxi"
+#line 83 "lexer.lxi"
 return STRING_V;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 84 "ex.lxi"
+#line 85 "lexer.lxi"
 return BOOL_T;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 85 "ex.lxi"
+#line 86 "lexer.lxi"
 return BOOL_V;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 87 "ex.lxi"
+#line 88 "lexer.lxi"
 return IDENTIFIER;
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 89 "ex.lxi"
+#line 90 "lexer.lxi"
 line_number++;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 90 "ex.lxi"
+#line 91 "lexer.lxi"
 
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 92 "ex.lxi"
+#line 93 "lexer.lxi"
 fprintf(stderr, "invalid character at line %d: %s\n", line_number, yytext);
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 94 "ex.lxi"
+#line 95 "lexer.lxi"
 ECHO;
 	YY_BREAK
-#line 996 "lex.yy.c"
+#line 997 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1998,7 +1999,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 94 "ex.lxi"
+#line 95 "lexer.lxi"
 
 #include <unordered_map>
 #include <iostream>
@@ -2033,7 +2034,7 @@ int main(int argc, char**argv) {
                 }
                 pif << current_code << "\t\t" << symbol_indices.at(yytext) << '\n';
                 break;
-            default: pif << current_code << "\t\t" << -1 << '\n';
+            default: pif << current_code << "\t\t" << 0 << '\n';
         }
     }
 }
