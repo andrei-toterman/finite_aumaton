@@ -2009,7 +2009,7 @@ void yyfree (void * ptr )
 using namespace std;
 
 int main(int argc, char**argv) {
-    if ( argc > 1 ) {
+    if (argc > 1) {
         yyin = fopen(argv[1], "r");
     } else {
         std::cerr << "No input file give\n";
@@ -2028,6 +2028,7 @@ int main(int argc, char**argv) {
             case IDENTIFIER:
             case INT_V:
             case STRING_V:
+            case BOOL_V:
                 if (symbol_indices.insert({yytext, available_index}).second) {
                     st << yytext << '\n';
                     available_index++;

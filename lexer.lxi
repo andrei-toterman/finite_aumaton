@@ -120,6 +120,7 @@ int main(int argc, char**argv) {
             case IDENTIFIER:
             case INT_V:
             case STRING_V:
+            case BOOL_V:
                 if (symbol_indices.insert({yytext, available_index}).second) {
                     st << yytext << '\n';
                     available_index++;
