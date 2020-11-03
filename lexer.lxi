@@ -101,7 +101,7 @@ true|false return BOOL_V;
 using namespace std;
 
 int main(int argc, char**argv) {
-    if ( argc > 1 ) {
+    if (argc > 1) {
         yyin = fopen(argv[1], "r");
     } else {
         std::cerr << "No input file give\n";
