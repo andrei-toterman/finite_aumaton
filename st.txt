@@ -1,9 +1,0 @@
-k
-j
-i
-t
-1
-"number must be greater than 0\n"
-2
-0
-" is prime\n"
