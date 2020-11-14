@@ -1,0 +1,24 @@
+letter ::= "a" | ... | "z" | "A" | ... | "Z"
+digit ::= "0" | ... | "9"
+number ::= digit{digit}
+
+state ::= letter{letter}{number}
+alphabet_symbol ::= letter | digit | "`" | "~" | "!" | "@" | "#" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-" | "_" | "=" | "+" | "[" | "]" | "{" | "}" | "\" | "|" | ";" | ":" | "'" | """ | "," | "<" | "." | ">" | "/" | "?" | " "
+transition ::= alphabet_symbol state
+
+states ::= state{state}
+initial_state ::= state
+final_states ::= states
+alphabet ::= alphabet_symbol{alphabet_symbol}
+state_transitions ::= state {transition}
+
+fa_in ::= states initial_state final_state alphabet {state_transitions}
+
+# example
+q1 q2 q3
+q1
+q2 q3
+ab12
+q1 a q2 2 q3
+q2 1 q1 a q3
+q3 b q3 2 q1 a q2
