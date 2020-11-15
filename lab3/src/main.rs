@@ -20,7 +20,7 @@ struct FiniteAutomaton<'a> {
 }
 
 impl<'a> FiniteAutomaton<'a> {
-    fn check_token(&self, token: &str) -> bool {
+    fn is_valid_token(&self, token: &str) -> bool {
         let mut current_state = self.initial_state;
         for symbol in token.chars() {
             current_state = self
@@ -102,7 +102,7 @@ impl<'a> Display for FiniteAutomaton<'a> {
         for (state, transitions) in self.transitions.iter() {
             write!(f, "\n")?;
             for (symbol, next_state) in transitions.iter() {
-                write!(f, "    δ({}, \"{}\") = {}", state, symbol, next_state)?;
+                write!(f, r#"    δ({}, "{}") = {}"#, state, symbol, next_state)?;
             }
         }
 
@@ -117,23 +117,23 @@ impl<'a> Display for FiniteAutomaton<'a> {
     }
 }
 
-#[test]
 /// checks if a sequence of characters is a valid identifier
 /// a valid identifier contains only letters, digits or underscore and cannot start with a digit
 /// more precisely, it follows the regex [A-Za-z_][A-Za-z0-9_]*
+#[test]
 fn bonus() {
     let fa_in = "\
-q1 q2 q3
-q1
-q3
+Init Invalid Valid
+Init
+Valid
 _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890
-q1 1234567890 q2 _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz q3
-q2 _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 q2
-q3 _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 q3
+Init 1234567890 Invalid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz Valid
+Invalid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 Invalid
+Valid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 Valid
 ";
 
     let fa = FiniteAutomaton::from(fa_in);
-    assert!(fa.check_token("valid_123"));
-    assert!(!fa.check_token("1_begins_with_digit"));
-    assert!(!fa.check_token(""));
+    assert!(fa.is_valid_token("valid_123"), r#""valid_123" should be valid"#);
+    assert!(!fa.is_valid_token("1_begins_with_digit"), r#""1_begins_with_digit" should be invalid"#);
+    assert!(!fa.is_valid_token(""), "empty string should be invalid");
 }
