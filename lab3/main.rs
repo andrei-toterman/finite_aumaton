@@ -23,28 +23,20 @@ fn main() {
 0. exit
 "
         );
+        
         let mut option = String::new();
         let _ = stdin().read_line(&mut option);
-        let option = option.trim().parse::<u8>();
-        let option = match option {
-            Ok(number) => number,
-            Err(_) => {
-                eprintln!("must be number");
-                continue;
-            }
-        };
-        match option {
-            0 => break,
-            1 => fa.print_states(),
-            2 => fa.print_alphabet(),
-            3 => fa.print_transitions(),
-            4 => fa.print_initial_state(),
-            5 => fa.print_final_states(),
-            6 => {
+        match option.trim() {
+            "0" => break,
+            "1" => fa.print_states(),
+            "2" => fa.print_alphabet(),
+            "3" => fa.print_transitions(),
+            "4" => fa.print_initial_state(),
+            "5" => fa.print_final_states(),
+            "6" => {
                 let mut token = String::new();
                 let _ = stdin().read_line(&mut token);
-                let token = token.trim();
-                if fa.is_valid_token(token) {
+                if fa.is_valid_token(token.trim()) {
                     println!("valid");
                 } else {
                     println!("invalid");
@@ -119,24 +111,19 @@ impl<'a> FiniteAutomaton<'a> {
 
 impl<'a> From<&'a str> for FiniteAutomaton<'a> {
     fn from(s: &'a str) -> Self {
-        let mut lines = s.split('\n');
+        let mut lines = s
+            .split('\n')
+            .map(|line| line.trim())
+            .filter(|line| !line.is_empty());
 
-        let states = lines
-            .next()
-            .expect("failed to get states line")
-            .trim()
-            .split(' ');
+        let states = lines.next().expect("failed to get states line").split(' ');
         let states = HashSet::from_iter(states);
 
-        let initial_state = lines
-            .next()
-            .expect("failed to get initial state line")
-            .trim();
+        let initial_state = lines.next().expect("failed to get initial state line");
 
         let final_states = lines
             .next()
             .expect("failed to get final states line")
-            .trim()
             .split(' ');
         let final_states = HashSet::from_iter(final_states);
 
@@ -145,10 +132,6 @@ impl<'a> From<&'a str> for FiniteAutomaton<'a> {
 
         let mut transitions = HashMap::new();
         for transition_line in lines {
-            let transition_line = transition_line.trim();
-            if transition_line.is_empty() {
-                continue;
-            }
             let mut state_trans = transition_line.split(' ');
             let state = state_trans.next().expect("failed to get transition state");
             let state_transitions = transitions.entry(state).or_insert(HashMap::new());
