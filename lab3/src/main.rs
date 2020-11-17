@@ -1,14 +1,59 @@
 use std::{
     collections::{HashMap, HashSet},
     fmt::Display,
+    io::stdin,
     iter::FromIterator,
 };
 
 fn main() {
-    let input_path = std::env::args().skip(1).next().expect("no file given");
-    let input = std::fs::read_to_string(input_path).expect("failed to read file");
-    let fa = FiniteAutomaton::from(input.as_str());
-    println!("{}", fa);
+    let mut args = std::env::args().skip(1);
+    let input_path = args.next().expect("no file given");
+
+    let input_file = std::fs::read_to_string(input_path).expect("failed to read file");
+    let fa = FiniteAutomaton::from(input_file.as_str());
+
+    loop {
+        println!(
+            "\
+1. set of states
+2. alphabet
+3. transitions
+4. initial state
+5. final states
+6. check token
+0. exit
+"
+        );
+        let mut option = String::new();
+        let _ = stdin().read_line(&mut option);
+        let option = option.trim().parse::<u8>();
+        let option = match option {
+            Ok(number) => number,
+            Err(_) => {
+                eprintln!("must be number");
+                continue;
+            }
+        };
+        match option {
+            0 => break,
+            1 => fa.print_states(),
+            2 => fa.print_alphabet(),
+            3 => fa.print_transitions(),
+            4 => fa.print_initial_state(),
+            5 => fa.print_final_states(),
+            6 => {
+                let mut token = String::new();
+                let _ = stdin().read_line(&mut token);
+                let token = token.trim();
+                if fa.is_valid_token(token) {
+                    println!("valid");
+                } else {
+                    println!("invalid");
+                }
+            }
+            _ => eprintln!("invalid option"),
+        }
+    }
 }
 
 struct FiniteAutomaton<'a> {
@@ -31,6 +76,45 @@ impl<'a> FiniteAutomaton<'a> {
                 .expect("unexpected transition symbol");
         }
         self.final_states.contains(current_state)
+    }
+
+    fn print_states(&self) {
+        print!("states Q = {{");
+        for state in self.states.iter() {
+            print!(" {}", state);
+        }
+        println!(" }}");
+    }
+
+    fn print_alphabet(&self) {
+        print!("alphabet Σ = {{");
+        for symbol in self.alphabet.iter() {
+            print!(r#" "{}""#, symbol);
+        }
+        println!(" }}");
+    }
+
+    fn print_transitions(&self) {
+        print!("transitions");
+        for (state, transitions) in self.transitions.iter() {
+            print!("\n");
+            for (symbol, next_state) in transitions.iter() {
+                print!(r#"    δ({}, "{}") = {}"#, state, symbol, next_state);
+            }
+        }
+        println!();
+    }
+
+    fn print_initial_state(&self) {
+        println!("initial state {}", self.initial_state);
+    }
+
+    fn print_final_states(&self) {
+        print!("final states F = {{");
+        for final_state in self.final_states.iter() {
+            print!(" {}", final_state);
+        }
+        println!(" }}");
     }
 }
 
@@ -84,56 +168,4 @@ impl<'a> From<&'a str> for FiniteAutomaton<'a> {
             transitions,
         }
     }
-}
-
-impl<'a> Display for FiniteAutomaton<'a> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "states Q = {{")?;
-        for state in self.states.iter() {
-            write!(f, " {}", state)?;
-        }
-
-        write!(f, " }}\nalphabet Σ = {{",)?;
-        for symbol in self.alphabet.iter() {
-            write!(f, r#" "{}""#, symbol)?;
-        }
-
-        write!(f, " }}\ntransitions")?;
-        for (state, transitions) in self.transitions.iter() {
-            write!(f, "\n")?;
-            for (symbol, next_state) in transitions.iter() {
-                write!(f, r#"    δ({}, "{}") = {}"#, state, symbol, next_state)?;
-            }
-        }
-
-        write!(f, "\ninitial state {}", self.initial_state)?;
-
-        write!(f, "\nfinal states F = {{")?;
-        for final_state in self.final_states.iter() {
-            write!(f, " {}", final_state)?;
-        }
-
-        writeln!(f, " }}")
-    }
-}
-
-/// checks if a sequence of characters is a valid identifier
-/// a valid identifier contains only letters, digits or underscore and cannot start with a digit
-/// more precisely, it follows the regex [A-Za-z_][A-Za-z0-9_]*
-#[test]
-fn bonus() {
-    let fa_in = "\
-Init Invalid Valid
-Init
-Valid
-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890
-Init 1234567890 Invalid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz Valid
-Invalid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 Invalid
-Valid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 Valid
-";
-
-    let fa = FiniteAutomaton::from(fa_in);
-    assert!(fa.is_valid_token("valid_123"), r#""valid_123" should be valid"#);
-    assert!(!fa.is_valid_token("1_begins_with_digit"), r#""1_begins_with_digit" should be invalid"#);
-    assert!(!fa.is_valid_token(""), "empty string should be invalid");
 }

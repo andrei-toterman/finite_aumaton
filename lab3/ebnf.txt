@@ -12,12 +12,3 @@ alphabet ::= symbol{symbol}
 state_transitions ::= state transition{transition}
 
 fa_in ::= states initial_state final_state alphabet {state_transitions}
-
-# example
-q1 q2 q3
-q1
-q2 q3
-ab12
-q1 a q2 12 q3
-q2 1 q1 a q3
-q3 b q3 2 q1 a q2
