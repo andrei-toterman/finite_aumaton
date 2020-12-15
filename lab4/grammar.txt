@@ -1,0 +1,102 @@
+// the file is structured in the following way
+// G represents the grammar tuple
+// N is the set of non-terminals
+// Σ is the set of terminals
+// S represents the starting symbol
+// then each production is written on a new line and they are all separated by an empty line
+
+G = ( N, Σ, P, S )
+
+N = { PROG, DECL_SEQ, STMT_SEQ, EXIT, WHILE_STMT, IF_STMT, ELIF_SEQ, ELIF, ELSE, IF, CONDITION, COMPARISON, STMT, ASSIGN, DECL, IO, LOGICAL, ARITHM, OP, EXPR_SEQ, EXPR, TERM, TUPLE_V, LITERAL, T_LITERAL, S_LITERAL, TYPE_SEQ, TYPE, T_TYPE, S_TYPE, BOOL, STR, LD_SEQ, LD, LDU_SEQ, LDU LETTER, INT, NUM, DIGIT_SEQ, DIGIT, N0_DIGIT, SEP, ID }
+
+Σ = { + - * / % < > == <= >= != && || = ; "{" "}" $in $out $err @ [ ] boolean int string true false while if else elif exit a ... z A ... Z 0 1 2 3 4 5 6 7 8 9 _ }
+
+S: PROG
+
+PROG -> DECL_SEQ STMT_SEQ EXIT
+
+DECL_SEQ -> DECL | DECL DECL_SEQ
+
+DECL -> TYPE ID ;
+
+STMT_SEQ -> STMT | STMT STMT_SEQ
+
+STMT -> ASSIGN ; | IO ; | IF_STMT | WHILE_STMT | EXIT
+
+WHILE_STMT -> while CONDITION { STMT_SEQ }
+
+IF_STMT -> IF | IF ELSE | IF ELIF_SEQ | IF ELIF_SEQ ELSE
+
+IF -> if CONDITION { STMT_SEQ }
+
+ELSE -> else { STMT_SEQ }
+
+ELIF -> elif CONDITION { STMT_SEQ }
+
+ELIF_SEQ -> ELIF | ELIF ELIF_SEQ
+
+CONDITION -> COMPARISON EXPR EXPR
+
+COMPARISON -> < | > | == | != | <= | >=
+
+EXIT -> exit NUM ;
+
+ASSIGN -> ID = EXPR
+
+IO -> $in ID | $in TUPLE_V | $out EXPR | $err EXPR
+
+LOGICAL -> && | "||"
+
+ARITHM -> + | - | * | / | %
+
+OP -> ARITHM | LOGICAL
+
+EXPR_SEQ -> EXPR | EXPR EXPR_SEQ
+
+EXPR -> TERM | OP EXPR EXPR
+
+TERM -> ID | LITERAL | TUPLE_V
+
+TUPLE_V -> ID @ NUM | ID @ ID
+
+LITERAL -> S_LITERAL | T_LITERAL
+
+S_LITERAL -> INT | STR | BOOL
+
+T_LITERAL -> [EXPR_SEQ]
+
+BOOL -> true | false
+
+STRING -> " LD_SEQ "
+
+INT -> + NUM | - NUM | NUM
+
+TYPE -> S_TYPE | T_TYPE
+
+S_TYPE -> int | string | boolean
+
+T_TYPE -> [TYPE_SEQ] | [TYPE NUM]
+
+TYPE_SEQ -> TYPE | TYPE TYPE_SEQ
+
+LD_SEQ -> LD | LD LD_SEQ
+
+LD -> LETTER | DIGIT
+
+NUM -> DIGIT | N0_DIGIT DIGIT_SEQ
+
+DIGIT_SEQ -> DIGIT | DIGIT DIGIT_SEQ
+
+LDU -> LDU | LDU LDU_SEQ
+
+LDU -> LETTER | DIGIT | _
+
+N0_DIGIT -> 1 | ... | 9
+
+DIGIT -> 0 | N0_DIGIT
+
+LETTER -> a | ... | z | A | ... | Z
+
+ID -> LETTER | LETTER LDU_SEQ
+
+SEP -> { | } | [ | ] | ; | \n | \t | " "
