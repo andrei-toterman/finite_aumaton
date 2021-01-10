@@ -1,8 +1,4 @@
-use std::{
-    collections::{HashMap, HashSet},
-    io::stdin,
-    iter::FromIterator,
-};
+use std::collections::{HashMap, HashSet};
 
 fn main() {
     let mut args = std::env::args().skip(1);
@@ -23,9 +19,9 @@ fn main() {
 0. exit
 "
         );
-        
+
         let mut option = String::new();
-        let _ = stdin().read_line(&mut option);
+        let _ = std::io::stdin().read_line(&mut option);
         match option.trim() {
             "0" => break,
             "1" => fa.print_states(),
@@ -35,7 +31,7 @@ fn main() {
             "5" => fa.print_final_states(),
             "6" => {
                 let mut token = String::new();
-                let _ = stdin().read_line(&mut token);
+                let _ = std::io::stdin().read_line(&mut token);
                 if fa.is_valid_token(token.trim()) {
                     println!("valid");
                 } else {
@@ -88,7 +84,7 @@ impl<'a> FiniteAutomaton<'a> {
     fn print_transitions(&self) {
         print!("transitions");
         for (state, transitions) in self.transitions.iter() {
-            print!("\n");
+            println!();
             for (symbol, next_state) in transitions.iter() {
                 print!(r#"    δ({}, "{}") = {}"#, state, symbol, next_state);
             }
@@ -116,26 +112,29 @@ impl<'a> From<&'a str> for FiniteAutomaton<'a> {
             .map(|line| line.trim())
             .filter(|line| !line.is_empty());
 
-        let states = lines.next().expect("failed to get states line").split(' ');
-        let states = HashSet::from_iter(states);
-
+        let states = lines
+            .next()
+            .expect("failed to get states line")
+            .split(' ')
+            .collect();
         let initial_state = lines.next().expect("failed to get initial state line");
-
         let final_states = lines
             .next()
             .expect("failed to get final states line")
-            .split(' ');
-        let final_states = HashSet::from_iter(final_states);
-
-        let alphabet = lines.next().expect("failed to get alphabet line").chars();
-        let alphabet = HashSet::from_iter(alphabet);
+            .split(' ')
+            .collect();
+        let alphabet = lines
+            .next()
+            .expect("failed to get alphabet line")
+            .chars()
+            .collect();
 
         let mut transitions = HashMap::new();
         for transition_line in lines {
-            let mut state_trans = transition_line.split(' ');
-            let state = state_trans.next().expect("failed to get transition state");
-            let state_transitions = transitions.entry(state).or_insert(HashMap::new());
-            while let (Some(symbols), Some(next_state)) = (state_trans.next(), state_trans.next()) {
+            let mut transition = transition_line.split(' ');
+            let state = transition.next().expect("failed to get transition state");
+            let state_transitions = transitions.entry(state).or_insert_with(HashMap::new);
+            while let (Some(symbols), Some(next_state)) = (transition.next(), transition.next()) {
                 for symbol in symbols.chars() {
                     state_transitions.insert(symbol, next_state);
                 }
