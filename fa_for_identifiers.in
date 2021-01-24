@@ -1,0 +1,20 @@
+# this FA describes identifiers of the form [A-Za-z_][A-Za-z0-9_]*
+
+# set of states
+Init Invalid Valid
+
+# initial state
+Init
+
+# set of final states
+Valid
+
+# alphabet
+_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890
+
+# the set of transitions
+# each state is followed by a list of pairs, where each pair is a list of symbols and the state to which they lead
+# the transitions for a state can be described on separate lines
+Init 1234567890 Invalid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz Valid
+Invalid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 Invalid
+Valid _ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890 Valid

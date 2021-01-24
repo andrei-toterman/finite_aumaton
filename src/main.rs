@@ -1,34 +1,32 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet};
 
 fn main() {
     let mut args = std::env::args().skip(1);
     let input_path = args.next().expect("no file given");
 
     let input_file = std::fs::read_to_string(input_path).expect("failed to read file");
-    let fa = FiniteAutomaton::from(input_file.as_str());
+    let fa = FiniteAutomaton::new(input_file.as_str());
 
     loop {
         println!(
-            "\
-1. set of states
-2. alphabet
-3. transitions
-4. initial state
-5. final states
-6. check token
-0. exit
-"
+            "1. print set of states\n\
+             2. print alphabet\n\
+             3. print transitions\n\
+             4. print initial state\n\
+             5. print final states\n\
+             6. check token\n\
+             0. exit"
         );
 
         let mut option = String::new();
         let _ = std::io::stdin().read_line(&mut option);
         match option.trim() {
             "0" => break,
-            "1" => fa.print_states(),
-            "2" => fa.print_alphabet(),
-            "3" => fa.print_transitions(),
-            "4" => fa.print_initial_state(),
-            "5" => fa.print_final_states(),
+            "1" => println!("states = {:?}", fa.states),
+            "2" => println!("alphabet = {:?}", fa.alphabet),
+            "3" => println!("transitions = {:#?}", fa.transitions),
+            "4" => println!("initial state = {}", fa.initial_state),
+            "5" => println!("final states = {:?}", fa.final_states),
             "6" => {
                 let mut token = String::new();
                 let _ = std::io::stdin().read_line(&mut token);
@@ -44,11 +42,11 @@ fn main() {
 }
 
 struct FiniteAutomaton<'a> {
-    states: HashSet<&'a str>,
+    states: BTreeSet<&'a str>,
+    alphabet: BTreeSet<char>,
+    transitions: BTreeMap<&'a str, BTreeMap<char, &'a str>>,
     initial_state: &'a str,
-    final_states: HashSet<&'a str>,
-    alphabet: HashSet<char>,
-    transitions: HashMap<&'a str, HashMap<char, &'a str>>,
+    final_states: BTreeSet<&'a str>,
 }
 
 impl<'a> FiniteAutomaton<'a> {
@@ -64,53 +62,12 @@ impl<'a> FiniteAutomaton<'a> {
         }
         self.final_states.contains(current_state)
     }
-
-    fn print_states(&self) {
-        print!("states Q = {{");
-        for state in self.states.iter() {
-            print!(" {}", state);
-        }
-        println!(" }}");
-    }
-
-    fn print_alphabet(&self) {
-        print!("alphabet Σ = {{");
-        for symbol in self.alphabet.iter() {
-            print!(r#" "{}""#, symbol);
-        }
-        println!(" }}");
-    }
-
-    fn print_transitions(&self) {
-        print!("transitions");
-        for (state, transitions) in self.transitions.iter() {
-            println!();
-            for (symbol, next_state) in transitions.iter() {
-                print!(r#"    δ({}, "{}") = {}"#, state, symbol, next_state);
-            }
-        }
-        println!();
-    }
-
-    fn print_initial_state(&self) {
-        println!("initial state {}", self.initial_state);
-    }
-
-    fn print_final_states(&self) {
-        print!("final states F = {{");
-        for final_state in self.final_states.iter() {
-            print!(" {}", final_state);
-        }
-        println!(" }}");
-    }
-}
-
-impl<'a> From<&'a str> for FiniteAutomaton<'a> {
-    fn from(s: &'a str) -> Self {
+    
+    fn new(s: &'a str) -> Self {
         let mut lines = s
             .split('\n')
             .map(|line| line.trim())
-            .filter(|line| !line.is_empty());
+            .filter(|line| !(line.is_empty() || line.starts_with('#')));
 
         let states = lines
             .next()
@@ -129,11 +86,11 @@ impl<'a> From<&'a str> for FiniteAutomaton<'a> {
             .chars()
             .collect();
 
-        let mut transitions = HashMap::new();
+        let mut transitions = BTreeMap::new();
         for transition_line in lines {
             let mut transition = transition_line.split(' ');
             let state = transition.next().expect("failed to get transition state");
-            let state_transitions = transitions.entry(state).or_insert_with(HashMap::new);
+            let state_transitions = transitions.entry(state).or_insert_with(BTreeMap::new);
             while let (Some(symbols), Some(next_state)) = (transition.next(), transition.next()) {
                 for symbol in symbols.chars() {
                     state_transitions.insert(symbol, next_state);
@@ -143,10 +100,10 @@ impl<'a> From<&'a str> for FiniteAutomaton<'a> {
 
         Self {
             states,
-            initial_state,
-            final_states,
             alphabet,
             transitions,
+            initial_state,
+            final_states,
         }
     }
 }
