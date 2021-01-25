@@ -7,6 +7,8 @@ fn main() {
     let input_file = std::fs::read_to_string(input_path).expect("failed to read file");
     let fa = FiniteAutomaton::new(input_file.as_str());
 
+    let mut option = String::new();
+    let mut token = String::new();
     loop {
         println!(
             "1. print set of states\n\
@@ -18,26 +20,26 @@ fn main() {
              0. exit"
         );
 
-        let mut option = String::new();
-        let _ = std::io::stdin().read_line(&mut option);
+        std::io::stdin().read_line(&mut option).expect("failed to read option");
         match option.trim() {
             "0" => break,
             "1" => println!("states = {:?}", fa.states),
             "2" => println!("alphabet = {:?}", fa.alphabet),
             "3" => println!("transitions = {:#?}", fa.transitions),
-            "4" => println!("initial state = {}", fa.initial_state),
+            "4" => println!("initial state = {:?}", fa.initial_state),
             "5" => println!("final states = {:?}", fa.final_states),
             "6" => {
-                let mut token = String::new();
-                let _ = std::io::stdin().read_line(&mut token);
+                std::io::stdin().read_line(&mut token).expect("failed to read token");
                 if fa.is_valid_token(token.trim()) {
                     println!("valid");
                 } else {
                     println!("invalid");
                 }
+                token.clear();
             }
             _ => eprintln!("invalid option"),
         }
+        option.clear();
     }
 }
 
