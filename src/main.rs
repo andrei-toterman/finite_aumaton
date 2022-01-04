@@ -1,9 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 fn main() {
-    let mut args = std::env::args().skip(1);
-    let input_path = args.next().expect("no file given");
-
+    let input_path = std::env::args().nth(1).expect("no file given");
     let input_file = std::fs::read_to_string(input_path).expect("failed to read file");
     let fa = FiniteAutomaton::new(input_file.as_str());
 
@@ -20,7 +18,9 @@ fn main() {
              0. exit"
         );
 
-        std::io::stdin().read_line(&mut option).expect("failed to read option");
+        std::io::stdin()
+            .read_line(&mut option)
+            .expect("failed to read option");
         match option.trim() {
             "0" => break,
             "1" => println!("states = {:?}", fa.states),
@@ -29,7 +29,9 @@ fn main() {
             "4" => println!("initial state = {:?}", fa.initial_state),
             "5" => println!("final states = {:?}", fa.final_states),
             "6" => {
-                std::io::stdin().read_line(&mut token).expect("failed to read token");
+                std::io::stdin()
+                    .read_line(&mut token)
+                    .expect("failed to read token");
                 if fa.is_valid_token(token.trim()) {
                     println!("valid");
                 } else {
@@ -53,18 +55,16 @@ struct FiniteAutomaton<'a> {
 
 impl<'a> FiniteAutomaton<'a> {
     fn is_valid_token(&self, token: &str) -> bool {
-        let mut current_state = self.initial_state;
-        for symbol in token.chars() {
-            current_state = self
-                .transitions
-                .get(current_state)
+        let final_state = token.chars().fold(self.initial_state, |state, symbol| {
+            self.transitions
+                .get(state)
                 .expect("state has no transitions")
                 .get(&symbol)
-                .expect("unexpected transition symbol");
-        }
-        self.final_states.contains(current_state)
+                .expect("unexpected transition symbol")
+        });
+        self.final_states.contains(final_state)
     }
-    
+
     fn new(s: &'a str) -> Self {
         let mut lines = s
             .split('\n')
