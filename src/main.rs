@@ -68,7 +68,7 @@ impl<'a> FiniteAutomaton<'a> {
     fn new(s: &'a str) -> Self {
         let mut lines = s
             .split('\n')
-            .map(|line| line.trim())
+            .map(str::trim)
             .filter(|line| !(line.is_empty() || line.starts_with('#')));
 
         let states = lines
